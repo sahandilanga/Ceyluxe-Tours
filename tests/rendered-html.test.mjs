@@ -16,18 +16,19 @@ test("contains the complete Ceyluxe Tours homepage experience", async () => {
   assert.doesNotMatch(page, /codex-preview|Your site is taking shape/i);
 });
 
-test("keeps the booking API and database schema in the source", async () => {
-  const [route, schema, page, layout] = await Promise.all([
+test("connects the booking form to the Express and MongoDB backend", async () => {
+  const [proxyRoute, apiRoute, model, server, layout] = await Promise.all([
     readFile(new URL("../app/api/inquiries/route.ts", import.meta.url), "utf8"),
-    readFile(new URL("../db/schema.ts", import.meta.url), "utf8"),
-    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../server/src/routes/inquiries.ts", import.meta.url), "utf8"),
+    readFile(new URL("../server/src/models/inquiry.ts", import.meta.url), "utf8"),
+    readFile(new URL("../server/src/server.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
   ]);
 
-  assert.match(route, /export async function POST/);
-  assert.match(route, /db\.insert\(inquiries\)/);
-  assert.match(schema, /sqliteTable\("inquiries"/);
-  assert.match(page, /<BookingForm \/>/);
+  assert.match(proxyRoute, /BACKEND_API_URL/);
+  assert.match(apiRoute, /Inquiry\.create/);
+  assert.match(model, /model\("Inquiry"/);
+  assert.match(server, /connectDatabase/);
   assert.match(layout, /openGraph/);
   assert.match(layout, /twitter/);
 });
