@@ -6,6 +6,115 @@ import { useEffect, useRef, useState } from "react";
 import type { Tour } from "@/lib/tours";
 import { BookingForm } from "./booking-form";
 
+const heroSlides = [
+  {
+    src: "/images/sigiriya.jpg",
+    location: "Sigiriya",
+    region: "The Cultural Triangle",
+    coordinates: "07°57′N · 80°45′E",
+  },
+  {
+    src: "/images/ella-train.jpg",
+    location: "Ella",
+    region: "The Hill Country",
+    coordinates: "06°52′N · 81°03′E",
+  },
+  {
+    src: "/images/elephants.jpg",
+    location: "The Wild",
+    region: "Sri Lanka’s National Parks",
+    coordinates: "An island alive with nature",
+  },
+  {
+    src: "/images/south-coast.jpg",
+    location: "South Coast",
+    region: "The Indian Ocean",
+    coordinates: "Where the island meets the sea",
+  },
+] as const;
+
+export function HeroBackdrop() {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const active = heroSlides[activeSlide];
+
+  useEffect(() => {
+    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setActiveSlide((current) => (current + 1) % heroSlides.length);
+    }, 6500);
+
+    return () => window.clearTimeout(timer);
+  }, [activeSlide, paused]);
+
+  return (
+    <>
+      <div className="hero-media" aria-hidden="true">
+        {heroSlides.map((slide, index) => (
+          <div
+            className={`hero-slide ${index === activeSlide ? "is-active" : ""}`}
+            key={slide.src}
+          >
+            <Image
+              src={slide.src}
+              alt=""
+              fill
+              priority={index === 0}
+              sizes="100vw"
+            />
+          </div>
+        ))}
+      </div>
+
+      <div className="hero-side-note" aria-live="polite">
+        <div className="hero-location-copy" key={active.location}>
+          <span>{active.coordinates}</span>
+          <strong>{active.location}</strong>
+          <small>{active.region}</small>
+        </div>
+        <div className="hero-slide-controls">
+          <span className="hero-slide-count">
+            {String(activeSlide + 1).padStart(2, "0")} /{" "}
+            {String(heroSlides.length).padStart(2, "0")}
+          </span>
+          <div className="hero-slide-dots" aria-label="Hero destinations">
+            {heroSlides.map((slide, index) => (
+              <button
+                type="button"
+                className={index === activeSlide ? "is-active" : ""}
+                aria-label={`Show ${slide.location}`}
+                aria-pressed={index === activeSlide}
+                onClick={() => setActiveSlide(index)}
+                key={slide.location}
+              >
+                <i />
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            className="hero-pause"
+            aria-label={paused ? "Play hero slideshow" : "Pause hero slideshow"}
+            aria-pressed={paused}
+            onClick={() => setPaused((current) => !current)}
+          >
+            {paused ? "Play" : "Pause"}
+          </button>
+        </div>
+        <div
+          className={`hero-progress ${paused ? "is-paused" : ""}`}
+          key={activeSlide}
+        >
+          <i />
+        </div>
+      </div>
+    </>
+  );
+}
+
 export function ScrollReveal() {
   useEffect(() => {
     document.documentElement.classList.add("reveal-ready");

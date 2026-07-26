@@ -12,8 +12,26 @@ test("contains the complete Ceyluxe Tours homepage experience", async () => {
   assert.match(page, /Sri Lanka,/i);
   assert.match(page, /shaped around you/i);
   assert.match(page, /Signature journeys/i);
+  assert.match(page, /<HeroBackdrop \/>/);
   assert.match(page, /<BookingForm \/>/);
   assert.doesNotMatch(page, /codex-preview|Your site is taking shape/i);
+});
+
+test("includes a cinematic, accessible Sri Lanka hero slideshow", async () => {
+  const [experience, styles] = await Promise.all([
+    readFile(new URL("../app/site-experience.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(experience, /heroSlides/);
+  assert.match(experience, /Sigiriya/);
+  assert.match(experience, /Ella/);
+  assert.match(experience, /South Coast/);
+  assert.match(experience, /prefers-reduced-motion/);
+  assert.match(experience, /Pause hero slideshow/);
+  assert.match(styles, /hero-slide\.is-active/);
+  assert.match(styles, /@keyframes hero-progress/);
+  assert.match(styles, /@keyframes hero-caption-in/);
 });
 
 test("connects the booking form to the Express and MongoDB backend", async () => {

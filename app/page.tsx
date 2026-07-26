@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { getPublishedTours } from "@/lib/tours";
 import { BookingForm } from "./booking-form";
-import { ScrollReveal, SiteHeader, TourPackages } from "./site-experience";
+import {
+  HeroBackdrop,
+  ScrollReveal,
+  SiteHeader,
+  TourPackages,
+} from "./site-experience";
 
 export const metadata: Metadata = {
   title: { absolute: "Ceyluxe Tours | Private Sri Lanka Journeys" },
@@ -25,14 +30,7 @@ export default async function Home() {
       <ScrollReveal />
 
       <section className="hero" id="top">
-        <Image
-          className="hero-background"
-          src="/images/sigiriya.jpg"
-          alt="Sigiriya rock fortress surrounded by Sri Lankan forest"
-          fill
-          priority
-          sizes="100vw"
-        />
+        <HeroBackdrop />
         <div className="hero-shade" />
         <div className="hero-copy">
           <p className="eyebrow">Private journeys · Sri Lanka</p>
@@ -52,11 +50,6 @@ export default async function Home() {
               Create my journey <span>↗</span>
             </a>
           </div>
-        </div>
-        <div className="hero-side-note">
-          <span>07°57&apos;N · 80°45&apos;E</span>
-          <strong>Sigiriya</strong>
-          <small>The Cultural Triangle</small>
         </div>
         <div className="scroll-cue"><span>Scroll to discover</span><i /></div>
       </section>
