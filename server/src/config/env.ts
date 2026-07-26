@@ -2,7 +2,7 @@ import "dotenv/config";
 import { z } from "zod";
 
 const envSchema = z.object({
-  PORT: z.coerce.number().int().positive().default(5000),
+  PORT: z.coerce.number().int().positive().default(5050),
   MONGODB_URI: z
     .string()
     .min(1, "MONGODB_URI is required")

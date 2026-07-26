@@ -1,5 +1,6 @@
 import cors from "cors";
 import express from "express";
+import { ipKeyGenerator, rateLimit } from "express-rate-limit";
 import helmet from "helmet";
 import mongoose from "mongoose";
 import { connectDatabase } from "./config/database.js";
@@ -25,15 +26,32 @@ app.use(
 );
 app.use(express.json({ limit: "32kb" }));
 
+const inquiryLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 5,
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+  keyGenerator(request) {
+    const email =
+      typeof request.body?.email === "string"
+        ? request.body.email.trim().toLowerCase()
+        : "";
+    return email ? `email:${email}` : `ip:${ipKeyGenerator(request.ip ?? "")}`;
+  },
+  message: {
+    error: "Too many requests were sent. Please wait a few minutes and try again.",
+  },
+});
+
 app.get("/api/health", (_request, response) => {
-  response.json({
-    status: "ok",
-    database:
-      mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+  const databaseConnected = mongoose.connection.readyState === 1;
+  response.status(databaseConnected ? 200 : 503).json({
+    status: databaseConnected ? "ok" : "degraded",
+    database: databaseConnected ? "connected" : "disconnected",
   });
 });
 
-app.use("/api/inquiries", inquiryRouter);
+app.use("/api/inquiries", inquiryLimiter, inquiryRouter);
 
 app.use(
   (
@@ -42,6 +60,7 @@ app.use(
     response: express.Response,
     _next: express.NextFunction,
   ) => {
+    void _next;
     console.error(error);
     response.status(500).json({
       error: "We could not save your request. Please try again.",

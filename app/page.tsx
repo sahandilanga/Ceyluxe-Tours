@@ -1,82 +1,14 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import { tours } from "@/lib/tours";
 import { BookingForm } from "./booking-form";
 import { ScrollReveal, SiteHeader, TourPackages } from "./site-experience";
 
 export const metadata: Metadata = {
-  title: "Ceyluxe Tours | Private Sri Lanka Journeys",
+  title: { absolute: "Ceyluxe Tours | Private Sri Lanka Journeys" },
   description:
     "Private, tailor-made Sri Lanka journeys crafted by local travel specialists. Explore culture, wildlife, hill country and the coast.",
 };
-
-export const tours = [
-  {
-    slug: "ceylon-signature",
-    category: "Signature",
-    title: "The Ceylon Signature",
-    duration: "12 days / 11 nights",
-    route: "Colombo · Sigiriya · Kandy · Ella · Yala · Galle",
-    image: "/images/sigiriya.jpg",
-    alt: "Sigiriya rock rising above green forest in Sri Lanka",
-    summary:
-      "Our complete island story: ancient kingdoms, tea-country railways, wild safaris and slow days beside the Indian Ocean.",
-    highlights: [
-      "Climb Sigiriya before the day warms",
-      "Ride the celebrated hill-country railway",
-      "Private jeep safari through Yala National Park",
-    ],
-    days: [
-      ["Day 01–02", "Arrive in Colombo and settle into the island rhythm."],
-      ["Day 03–04", "Explore Sigiriya, Dambulla and a rural village."],
-      ["Day 05–07", "Kandy heritage, tea country and the train to Ella."],
-      ["Day 08–09", "Walk Ella's highlands and search for wildlife in Yala."],
-      ["Day 10–12", "Unwind in Galle before your private departure transfer."],
-    ],
-  },
-  {
-    slug: "tea-trails",
-    category: "Highlands",
-    title: "Tea Trails by Rail",
-    duration: "8 days / 7 nights",
-    route: "Kandy · Nuwara Eliya · Ella · Haputale",
-    image: "/images/ella-train.jpg",
-    alt: "Blue train travelling through Sri Lanka hill country",
-    summary:
-      "A slower journey through cloud forest, tea estates and timeless railway towns, designed for walkers and romantics.",
-    highlights: [
-      "Reserved scenic train journey to Ella",
-      "Private tea tasting with an estate host",
-      "Sunrise walk above the Haputale valleys",
-    ],
-    days: [
-      ["Day 01–02", "Meet your chauffeur-guide and discover old Kandy."],
-      ["Day 03–04", "Travel into tea country and explore Nuwara Eliya."],
-      ["Day 05–06", "Take the railway to Ella and walk to Nine Arch Bridge."],
-      ["Day 07–08", "A quiet Haputale finale and private departure transfer."],
-    ],
-  },
-  {
-    slug: "wild-south",
-    category: "Wildlife",
-    title: "Wild South Escape",
-    duration: "9 days / 8 nights",
-    route: "Udawalawe · Yala · Mirissa · Galle",
-    image: "/images/elephants.jpg",
-    alt: "Elephants walking through a Sri Lankan landscape",
-    summary:
-      "Big wilderness, intimate camps and the easy southern coast—a private adventure with space to breathe.",
-    highlights: [
-      "Ethical elephant encounters in Udawalawe",
-      "Dawn and dusk private safari drives",
-      "Boutique beach stay and Galle Fort walk",
-    ],
-    days: [
-      ["Day 01–02", "Journey south and meet the elephants of Udawalawe."],
-      ["Day 03–05", "Slow down at a wilderness camp beside Yala."],
-      ["Day 06–07", "Follow the coast to Mirissa for an ocean escape."],
-      ["Day 08–09", "Discover Galle Fort and return to Colombo."],
-    ],
-  },
-];
 
 const whatsappHref =
   "https://wa.me/?text=Hello%20Ceyluxe%20Tours%2C%20I%27d%20like%20to%20plan%20a%20Sri%20Lanka%20journey.";
@@ -88,11 +20,13 @@ export default function Home() {
       <ScrollReveal />
 
       <section className="hero" id="top">
-        <img
+        <Image
           className="hero-background"
           src="/images/sigiriya.jpg"
           alt="Sigiriya rock fortress surrounded by Sri Lankan forest"
-          fetchPriority="high"
+          fill
+          priority
+          sizes="100vw"
         />
         <div className="hero-shade" />
         <div className="hero-copy">
@@ -144,18 +78,18 @@ export default function Home() {
         </div>
         <div className="pillar-grid">
           <article className="pillar pillar-tall" data-reveal="left">
-            <img src="/images/elephants.jpg" alt="Elephants in Sri Lankan wilderness" />
+            <Image src="/images/elephants.jpg" alt="Elephants in Sri Lankan wilderness" fill sizes="(max-width: 700px) 100vw, 50vw" />
             <div><small>The wild</small><h3>Wilderness</h3><p>Private safaris, thoughtful naturalists and beautiful stays at the edge of the wild.</p></div>
           </article>
           <article className="pillar" data-reveal="up" data-reveal-delay="100">
-            <img src="/images/ella-train.jpg" alt="Scenic train in the Sri Lankan highlands" />
+            <Image src="/images/ella-train.jpg" alt="Scenic train in the Sri Lankan highlands" fill sizes="(max-width: 700px) 100vw, 50vw" />
             <div><small>The soul</small><h3>Serenity</h3><p>Slow railways, tea-country mornings and room for the unexpected.</p></div>
           </article>
           <blockquote data-reveal="right" data-reveal-delay="180">
             “We design each route around you—connecting you to the soul of the island with local insight and complete care.”
           </blockquote>
           <article className="pillar pillar-wide" data-reveal="up" data-reveal-delay="120">
-            <img src="/images/sigiriya.jpg" alt="Ancient Sigiriya rock fortress" />
+            <Image src="/images/sigiriya.jpg" alt="Ancient Sigiriya rock fortress" fill sizes="(max-width: 700px) 100vw, 60vw" />
             <div><small>The story</small><h3>Heritage</h3><p>Ancient kingdoms, living traditions and local voices that bring every place to life.</p></div>
           </article>
         </div>
@@ -167,7 +101,7 @@ export default function Home() {
 
       <section className="story" id="why-us">
         <div className="story-image" data-reveal="image">
-          <img src="/images/south-coast.jpg" alt="Palm-fringed beach on Sri Lanka's south coast" />
+          <Image src="/images/south-coast.jpg" alt="Palm-fringed beach on Sri Lanka's south coast" fill sizes="(max-width: 1050px) 100vw, 50vw" />
           <span>South Coast · Sri Lanka</span>
         </div>
         <div className="story-copy" data-reveal="right">
@@ -192,10 +126,10 @@ export default function Home() {
           <h2>Your Sri Lanka story awaits</h2>
         </div>
         <div className="gallery-grid">
-          <div data-reveal="image"><img src="/images/south-coast.jpg" alt="Sri Lanka's tropical south coast" /></div>
-          <div data-reveal="image" data-reveal-delay="100"><img src="/images/ella-train.jpg" alt="Train journey through Ella" /></div>
-          <div data-reveal="image" data-reveal-delay="180"><img src="/images/elephants.jpg" alt="Wild elephants in Sri Lanka" /></div>
-          <div data-reveal="image" data-reveal-delay="100"><img src="/images/sigiriya.jpg" alt="Sigiriya at sunrise" /></div>
+          <div data-reveal="image"><Image src="/images/south-coast.jpg" alt="Sri Lanka's tropical south coast" fill sizes="(max-width: 700px) 100vw, 50vw" /></div>
+          <div data-reveal="image" data-reveal-delay="100"><Image src="/images/ella-train.jpg" alt="Train journey through Ella" fill sizes="(max-width: 700px) 50vw, 25vw" /></div>
+          <div data-reveal="image" data-reveal-delay="180"><Image src="/images/elephants.jpg" alt="Wild elephants in Sri Lanka" fill sizes="(max-width: 700px) 50vw, 25vw" /></div>
+          <div data-reveal="image" data-reveal-delay="100"><Image src="/images/sigiriya.jpg" alt="Sigiriya at sunrise" fill sizes="(max-width: 700px) 100vw, 50vw" /></div>
         </div>
       </section>
 

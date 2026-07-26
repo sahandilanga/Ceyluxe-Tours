@@ -32,3 +32,23 @@ test("connects the booking form to the Express and MongoDB backend", async () =>
   assert.match(layout, /openGraph/);
   assert.match(layout, /twitter/);
 });
+
+test("includes in-modal package booking and reservation fields", async () => {
+  const [packagePage, bookingForm, tours, experience] = await Promise.all([
+    readFile(new URL("../app/packages/[slug]/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/booking-form.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../lib/tours.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/site-experience.tsx", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(packagePage, /Day-by-day plan/i);
+  assert.match(packagePage, /BookingForm/);
+  assert.match(bookingForm, /arrivalDate/);
+  assert.match(bookingForm, /departureDate/);
+  assert.match(bookingForm, /mealPlan/);
+  assert.match(tours, /The Ceylon Signature/);
+  assert.match(tours, /Wild South Escape/);
+  assert.match(experience, /Book this journey/);
+  assert.match(experience, /<BookingForm/);
+  assert.doesNotMatch(experience, /View full itinerary/);
+});

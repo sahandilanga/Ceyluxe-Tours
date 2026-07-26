@@ -6,9 +6,12 @@ TypeScript and Tailwind CSS, with a separate Express and MongoDB Atlas API.
 ## Features
 
 - Editorial travel landing page with curated Sri Lanka journeys
+- Tour-package catalog with dedicated, SEO-ready itinerary pages
+- Day-by-day accordions and package-specific reservation forms
 - Responsive desktop, tablet and mobile layouts
 - Custom trip-planning form
 - Persistent booking inquiries through Express and MongoDB Atlas
+- Server-side booking validation and request rate limiting
 - SEO and branded social-sharing metadata
 - Cloudflare Worker-compatible production build
 
@@ -66,8 +69,11 @@ npm test             # Build and run the rendered-page checks
 ## Project structure
 
 - `app/page.tsx` — homepage
+- `app/packages/page.tsx` — tour-package catalog
+- `app/packages/[slug]/page.tsx` — itinerary and package booking page
 - `app/globals.css` — site styling
 - `app/booking-form.tsx` — trip-planning form
+- `lib/tours.ts` — shared package and itinerary content
 - `app/api/inquiries/route.ts` — secure frontend-to-backend proxy
 - `server/src/server.ts` — Express API entry point
 - `server/src/models/inquiry.ts` — MongoDB inquiry model
