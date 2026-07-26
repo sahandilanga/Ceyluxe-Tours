@@ -1,13 +1,18 @@
+import { clerkMiddleware } from "@clerk/express";
 import cors from "cors";
 import express from "express";
+import { ipKeyGenerator, rateLimit } from "express-rate-limit";
 import helmet from "helmet";
 import mongoose from "mongoose";
 import { connectDatabase } from "./config/database.js";
 import { env } from "./config/env.js";
+import { requireAdmin } from "./middleware/admin-auth.js";
+import { adminRouter } from "./routes/admin.js";
 import { inquiryRouter } from "./routes/inquiries.js";
+import { tourRouter } from "./routes/tours.js";
 
 const app = express();
-const allowedOrigins = env.CLIENT_URL.split(",").map((origin) => origin.trim());
+const allowedOrigins = env.clientOrigins;
 
 app.disable("x-powered-by");
 app.use(helmet());
@@ -20,20 +25,48 @@ app.use(
       }
       callback(new Error("Origin is not allowed"));
     },
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PATCH"],
   }),
 );
 app.use(express.json({ limit: "32kb" }));
 
+const inquiryLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 5,
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+  keyGenerator(request) {
+    const email =
+      typeof request.body?.email === "string"
+        ? request.body.email.trim().toLowerCase()
+        : "";
+    return email ? `email:${email}` : `ip:${ipKeyGenerator(request.ip ?? "")}`;
+  },
+  message: {
+    error: "Too many requests were sent. Please wait a few minutes and try again.",
+  },
+});
+
 app.get("/api/health", (_request, response) => {
-  response.json({
-    status: "ok",
-    database:
-      mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+  const databaseConnected = mongoose.connection.readyState === 1;
+  response.status(databaseConnected ? 200 : 503).json({
+    status: databaseConnected ? "ok" : "degraded",
+    database: databaseConnected ? "connected" : "disconnected",
   });
 });
 
-app.use("/api/inquiries", inquiryRouter);
+app.use("/api/inquiries", inquiryLimiter, inquiryRouter);
+app.use("/api/tours", tourRouter);
+app.use(
+  "/api/admin",
+  clerkMiddleware({
+    publishableKey: env.clerkPublishableKey,
+    secretKey: env.CLERK_SECRET_KEY,
+    authorizedParties: allowedOrigins,
+  }),
+  requireAdmin,
+  adminRouter,
+);
 
 app.use(
   (
@@ -42,9 +75,13 @@ app.use(
     response: express.Response,
     _next: express.NextFunction,
   ) => {
+    void _next;
     console.error(error);
-    response.status(500).json({
-      error: "We could not save your request. Please try again.",
+    const isUploadError = error instanceof Error && error.name === "MulterError";
+    response.status(isUploadError ? 400 : 500).json({
+      error: isUploadError
+        ? "The image is too large. Use an image under 6 MB."
+        : "The request could not be completed. Please try again.",
     });
   },
 );

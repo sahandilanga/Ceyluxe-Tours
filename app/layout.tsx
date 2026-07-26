@@ -10,8 +10,8 @@ export async function generateMetadata(): Promise<Metadata> {
     "localhost:3000";
   const protocol =
     requestHeaders.get("x-forwarded-proto") ??
-    (host.startsWith("localhost") ? "http" : "https");
-  const baseUrl = new URL(`${protocol}://${host}`);
+    (host.startsWith("localhost") || host.startsWith("127.0.0.1") ? "http" : "https");
+  const baseUrl = new URL(process.env.SITE_URL ?? `${protocol}://${host}`);
   const title = "Ceyluxe Tours | Private Sri Lanka Journeys";
   const description =
     "Private, tailor-made Sri Lanka journeys crafted by local travel specialists.";
@@ -28,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description,
       type: "website",
-      images: [{ url: socialImage, width: 1536, height: 909 }],
+      images: [{ url: socialImage, width: 1731, height: 909 }],
     },
     twitter: {
       card: "summary_large_image",

@@ -7,6 +7,12 @@ const nextConfig: NextConfig = {
   // production previews reliable.
   images: {
     unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+    ],
   },
 };
 
