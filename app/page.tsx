@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { BookingForm } from "./booking-form";
+import { ScrollReveal, SiteHeader, TourPackages } from "./site-experience";
 
 export const metadata: Metadata = {
   title: "Ceyluxe Tours | Private Sri Lanka Journeys",
@@ -7,287 +8,233 @@ export const metadata: Metadata = {
     "Private, tailor-made Sri Lanka journeys crafted by local travel specialists. Explore culture, wildlife, hill country and the coast.",
 };
 
-const tours = [
+export const tours = [
   {
-    eyebrow: "The complete island",
+    slug: "ceylon-signature",
+    category: "Signature",
     title: "The Ceylon Signature",
-    duration: "12 days · 11 nights",
-    route: "Sigiriya · Kandy · Ella · Yala · Galle",
+    duration: "12 days / 11 nights",
+    route: "Colombo · Sigiriya · Kandy · Ella · Yala · Galle",
     image: "/images/sigiriya.jpg",
     alt: "Sigiriya rock rising above green forest in Sri Lanka",
-    number: "01",
+    summary:
+      "Our complete island story: ancient kingdoms, tea-country railways, wild safaris and slow days beside the Indian Ocean.",
+    highlights: [
+      "Climb Sigiriya before the day warms",
+      "Ride the celebrated hill-country railway",
+      "Private jeep safari through Yala National Park",
+    ],
+    days: [
+      ["Day 01–02", "Arrive in Colombo and settle into the island rhythm."],
+      ["Day 03–04", "Explore Sigiriya, Dambulla and a rural village."],
+      ["Day 05–07", "Kandy heritage, tea country and the train to Ella."],
+      ["Day 08–09", "Walk Ella's highlands and search for wildlife in Yala."],
+      ["Day 10–12", "Unwind in Galle before your private departure transfer."],
+    ],
   },
   {
-    eyebrow: "Highlands & heritage",
+    slug: "tea-trails",
+    category: "Highlands",
     title: "Tea Trails by Rail",
-    duration: "8 days · 7 nights",
+    duration: "8 days / 7 nights",
     route: "Kandy · Nuwara Eliya · Ella · Haputale",
     image: "/images/ella-train.jpg",
     alt: "Blue train travelling through Sri Lanka hill country",
-    number: "02",
+    summary:
+      "A slower journey through cloud forest, tea estates and timeless railway towns, designed for walkers and romantics.",
+    highlights: [
+      "Reserved scenic train journey to Ella",
+      "Private tea tasting with an estate host",
+      "Sunrise walk above the Haputale valleys",
+    ],
+    days: [
+      ["Day 01–02", "Meet your chauffeur-guide and discover old Kandy."],
+      ["Day 03–04", "Travel into tea country and explore Nuwara Eliya."],
+      ["Day 05–06", "Take the railway to Ella and walk to Nine Arch Bridge."],
+      ["Day 07–08", "A quiet Haputale finale and private departure transfer."],
+    ],
   },
   {
-    eyebrow: "Wildlife & coast",
+    slug: "wild-south",
+    category: "Wildlife",
     title: "Wild South Escape",
-    duration: "9 days · 8 nights",
+    duration: "9 days / 8 nights",
     route: "Udawalawe · Yala · Mirissa · Galle",
     image: "/images/elephants.jpg",
     alt: "Elephants walking through a Sri Lankan landscape",
-    number: "03",
+    summary:
+      "Big wilderness, intimate camps and the easy southern coast—a private adventure with space to breathe.",
+    highlights: [
+      "Ethical elephant encounters in Udawalawe",
+      "Dawn and dusk private safari drives",
+      "Boutique beach stay and Galle Fort walk",
+    ],
+    days: [
+      ["Day 01–02", "Journey south and meet the elephants of Udawalawe."],
+      ["Day 03–05", "Slow down at a wilderness camp beside Yala."],
+      ["Day 06–07", "Follow the coast to Mirissa for an ocean escape."],
+      ["Day 08–09", "Discover Galle Fort and return to Colombo."],
+    ],
   },
 ];
 
-const inclusions = [
-  "Private air-conditioned vehicle",
-  "Handpicked boutique stays",
-  "English-speaking chauffeur-guide",
-  "24/7 in-country assistance",
-];
+const whatsappHref =
+  "https://wa.me/?text=Hello%20Ceyluxe%20Tours%2C%20I%27d%20like%20to%20plan%20a%20Sri%20Lanka%20journey.";
 
 export default function Home() {
   return (
     <main>
-      <header className="site-header">
-        <a className="brand" href="#top" aria-label="Ceyluxe Tours home">
-          <span className="brand-mark">C</span>
-          <span>
-            <strong>CEYLUXE</strong>
-            <small>TOURS · SRI LANKA</small>
-          </span>
-        </a>
-        <nav className="desktop-nav" aria-label="Main navigation">
-          <a href="#journeys">Journeys</a>
-          <a href="#why-us">Why Ceyluxe</a>
-          <a href="#process">How it works</a>
-        </nav>
-        <a className="header-cta" href="#plan">
-          Plan my journey <span aria-hidden="true">↗</span>
-        </a>
-      </header>
+      <SiteHeader />
+      <ScrollReveal />
 
       <section className="hero" id="top">
+        <img
+          className="hero-background"
+          src="/images/sigiriya.jpg"
+          alt="Sigiriya rock fortress surrounded by Sri Lankan forest"
+          fetchPriority="high"
+        />
+        <div className="hero-shade" />
         <div className="hero-copy">
-          <p className="eyebrow">
-            <span />
-            Private journeys across Sri Lanka
-          </p>
+          <p className="eyebrow">Private journeys · Sri Lanka</p>
           <h1>
-            Sri Lanka,
-            <br />
-            <em>shaped around you.</em>
+            Not just a holiday.
+            <em>Sri Lanka, shaped around you.</em>
           </h1>
-          <p className="hero-intro">
-            Slow mornings, wild encounters and storied places—woven into one
+          <p>
+            Ancient stories, misty railways and untamed shores—woven into one
             seamless private journey by people who call the island home.
           </p>
           <div className="hero-actions">
-            <a className="button button-primary" href="#journeys">
-              Explore journeys <span aria-hidden="true">↓</span>
+            <a className="button button-gold" href="#journeys">
+              Explore the island <span>↓</span>
             </a>
-            <a className="text-link" href="#plan">
-              Create a custom trip <span aria-hidden="true">→</span>
+            <a className="ghost-link" href="#plan">
+              Create my journey <span>↗</span>
             </a>
-          </div>
-          <div className="hero-trust">
-            <div>
-              <strong>100%</strong>
-              <span>Private & tailor-made</span>
-            </div>
-            <div>
-              <strong>Island-wide</strong>
-              <span>Local travel support</span>
-            </div>
           </div>
         </div>
+        <div className="hero-side-note">
+          <span>07°57&apos;N · 80°45&apos;E</span>
+          <strong>Sigiriya</strong>
+          <small>The Cultural Triangle</small>
+        </div>
+        <div className="scroll-cue"><span>Scroll to discover</span><i /></div>
+      </section>
 
-        <div className="hero-visual">
-          <img
-            src="/images/sigiriya.jpg"
-            alt="Sigiriya rock fortress surrounded by forest"
-          />
-          <div className="hero-caption">
-            <span>07°57&apos;N</span>
-            <p>
-              <strong>Sigiriya</strong>
-              Cultural Triangle
-            </p>
-          </div>
-          <div className="hero-stamp" aria-label="Made in Sri Lanka">
-            <span>MADE IN</span>
-            <strong>SL</strong>
-            <span>SRI LANKA</span>
-          </div>
+      <a
+        className="whatsapp-float"
+        href={whatsappHref}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Chat with Ceyluxe Tours on WhatsApp"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M19.1 4.9A9.85 9.85 0 0 0 3.6 16.8L2.2 22l5.3-1.4A9.8 9.8 0 0 0 12 21.7h.01A9.85 9.85 0 0 0 19.1 4.9Zm-7.09 15.14a8.1 8.1 0 0 1-4.13-1.13l-.3-.18-3.14.82.84-3.06-.2-.31a8.17 8.17 0 1 1 6.93 3.86Zm4.49-6.06c-.25-.12-1.45-.72-1.68-.8-.22-.08-.38-.12-.55.12-.16.25-.63.8-.77.96-.14.17-.29.19-.53.07-1.43-.72-2.37-1.28-3.32-2.91-.25-.43.25-.4.72-1.33.08-.16.04-.3-.02-.43-.06-.12-.55-1.32-.75-1.81-.2-.48-.4-.41-.55-.42h-.47c-.16 0-.43.06-.65.3-.23.25-.86.84-.86 2.04s.88 2.36 1 2.53c.12.16 1.72 2.63 4.17 3.69 1.55.67 2.16.73 2.94.62.47-.07 1.45-.6 1.66-1.17.2-.57.2-1.06.14-1.16-.06-.1-.23-.16-.47-.29Z" />
+        </svg>
+        <span>WhatsApp</span>
+      </a>
+
+      <section className="pillars section-shell" id="about">
+        <span className="giant-word" aria-hidden="true">Explore</span>
+        <div className="section-title centered" data-reveal="up">
+          <p>Discover the island</p>
+          <h2>The three pillars of Ceyluxe</h2>
+          <span>Every itinerary is grounded in nature, culture and the freedom to travel at your own pace.</span>
+        </div>
+        <div className="pillar-grid">
+          <article className="pillar pillar-tall" data-reveal="left">
+            <img src="/images/elephants.jpg" alt="Elephants in Sri Lankan wilderness" />
+            <div><small>The wild</small><h3>Wilderness</h3><p>Private safaris, thoughtful naturalists and beautiful stays at the edge of the wild.</p></div>
+          </article>
+          <article className="pillar" data-reveal="up" data-reveal-delay="100">
+            <img src="/images/ella-train.jpg" alt="Scenic train in the Sri Lankan highlands" />
+            <div><small>The soul</small><h3>Serenity</h3><p>Slow railways, tea-country mornings and room for the unexpected.</p></div>
+          </article>
+          <blockquote data-reveal="right" data-reveal-delay="180">
+            “We design each route around you—connecting you to the soul of the island with local insight and complete care.”
+          </blockquote>
+          <article className="pillar pillar-wide" data-reveal="up" data-reveal-delay="120">
+            <img src="/images/sigiriya.jpg" alt="Ancient Sigiriya rock fortress" />
+            <div><small>The story</small><h3>Heritage</h3><p>Ancient kingdoms, living traditions and local voices that bring every place to life.</p></div>
+          </article>
         </div>
       </section>
 
-      <div className="marquee" aria-label="Journey highlights">
-        <span>ANCIENT CITIES</span><i>✦</i>
-        <span>TEA COUNTRY</span><i>✦</i>
-        <span>WILD SAFARIS</span><i>✦</i>
-        <span>INDIAN OCEAN</span><i>✦</i>
-        <span>LOCAL FLAVOURS</span>
+      <div aria-label="Signature journeys">
+        <TourPackages tours={tours} />
       </div>
 
-      <section className="journeys section-shell" id="journeys">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">
-              <span />
-              Begin with an idea
-            </p>
-            <h2>Signature journeys</h2>
-          </div>
-          <p>
-            Thoughtful starting points, never fixed formulas. Every route can
-            be slowed down, extended or completely reimagined.
-          </p>
-        </div>
-
-        <div className="tour-grid">
-          {tours.map((tour) => (
-            <article className="tour-card" key={tour.title}>
-              <div className="tour-image">
-                <img src={tour.image} alt={tour.alt} />
-                <span className="tour-number">{tour.number}</span>
-              </div>
-              <div className="tour-content">
-                <p>{tour.eyebrow}</p>
-                <h3>{tour.title}</h3>
-                <div className="tour-meta">
-                  <span>{tour.duration}</span>
-                  <span>{tour.route}</span>
-                </div>
-                <a href="#plan" aria-label={`Plan ${tour.title}`}>
-                  Tailor this journey <span aria-hidden="true">↗</span>
-                </a>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
       <section className="story" id="why-us">
-        <div className="story-image">
-          <img
-            src="/images/south-coast.jpg"
-            alt="Palm-fringed beach on Sri Lanka's south coast"
-          />
-          <div className="story-note">
-            <span>South Coast</span>
-            <strong>Stay longer.</strong>
-            <p>The best journeys leave room for the unexpected.</p>
-          </div>
+        <div className="story-image" data-reveal="image">
+          <img src="/images/south-coast.jpg" alt="Palm-fringed beach on Sri Lanka's south coast" />
+          <span>South Coast · Sri Lanka</span>
         </div>
-        <div className="story-copy">
-          <p className="eyebrow light">
-            <span />
-            Travel, made personal
-          </p>
-          <h2>
-            Luxury is having the
-            <br />
-            <em>right things taken care of.</em>
-          </h2>
+        <div className="story-copy" data-reveal="right">
+          <p className="eyebrow">Why travel with us</p>
+          <h2>Luxury is having the right things taken care of.</h2>
           <p>
-            We pair local knowledge with calm, attentive planning. Your
-            chauffeur-guide, stays and daily rhythm are chosen around how you
-            want to experience Sri Lanka—not around a coach timetable.
+            Your route, chauffeur-guide, handpicked stays and daily rhythm are
+            chosen around how you want to experience Sri Lanka—not around a coach timetable.
           </p>
           <ul>
-            {inclusions.map((item) => (
-              <li key={item}>
-                <span>✓</span>{item}
-              </li>
-            ))}
+            <li><span>01</span>100% private and tailor-made</li>
+            <li><span>02</span>Local specialists, island-wide support</li>
+            <li><span>03</span>Carefully chosen boutique stays</li>
           </ul>
-          <a className="button button-light" href="#plan">
-            Start a conversation <span aria-hidden="true">→</span>
-          </a>
+          <a className="button button-gold" href="#plan">Start a conversation <span>→</span></a>
         </div>
       </section>
 
-      <section className="process section-shell" id="process">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">
-              <span />
-              Simple by design
-            </p>
-            <h2>From idea to island</h2>
-          </div>
-          <p>
-            One travel specialist stays with your journey from the first idea
-            to your final airport transfer.
-          </p>
+      <section className="gallery section-shell" id="gallery">
+        <div className="section-title" data-reveal="up">
+          <p>Moments from the island</p>
+          <h2>Your Sri Lanka story awaits</h2>
         </div>
-        <div className="process-grid">
-          <article>
-            <span>01</span>
-            <h3>Tell us your travel style</h3>
-            <p>Share your dates, pace, interests and the moments you imagine.</p>
-          </article>
-          <article>
-            <span>02</span>
-            <h3>Receive your private route</h3>
-            <p>We shape a considered itinerary and refine it together with you.</p>
-          </article>
-          <article>
-            <span>03</span>
-            <h3>Arrive and travel easy</h3>
-            <p>Your local team handles the details while you enjoy the island.</p>
-          </article>
+        <div className="gallery-grid">
+          <div data-reveal="image"><img src="/images/south-coast.jpg" alt="Sri Lanka's tropical south coast" /></div>
+          <div data-reveal="image" data-reveal-delay="100"><img src="/images/ella-train.jpg" alt="Train journey through Ella" /></div>
+          <div data-reveal="image" data-reveal-delay="180"><img src="/images/elephants.jpg" alt="Wild elephants in Sri Lanka" /></div>
+          <div data-reveal="image" data-reveal-delay="100"><img src="/images/sigiriya.jpg" alt="Sigiriya at sunrise" /></div>
         </div>
       </section>
 
       <section className="planner" id="plan">
-        <div className="planner-intro">
-          <p className="eyebrow light">
-            <span />
-            Your journey starts here
-          </p>
+        <div className="planner-intro" data-reveal="left">
+          <p className="eyebrow">Your journey starts here</p>
           <h2>Tell us where your imagination is going.</h2>
           <p>
-            No pressure and no generic package. Send us a few details and a
-            Ceyluxe travel specialist will shape the first outline of your trip.
+            Share a few details. A Ceyluxe travel specialist will create your
+            first private itinerary—without pressure or generic packages.
           </p>
-          <div className="planner-contact">
-            <span>Email</span>
-            <strong>hello@ceyluxetours.com</strong>
-            <span>Based in</span>
-            <strong>Colombo, Sri Lanka</strong>
+          <div className="direct-contact">
+            <a href="mailto:hello@ceyluxetours.com">hello@ceyluxetours.com</a>
+            <a href={whatsappHref} target="_blank" rel="noreferrer">Chat on WhatsApp ↗</a>
+            <span>Colombo · Sri Lanka</span>
           </div>
         </div>
-        <BookingForm />
+        <div data-reveal="right" data-reveal-delay="100"><BookingForm /></div>
       </section>
 
-      <footer>
-        <div className="footer-brand">
-          <a className="brand brand-light" href="#top">
-            <span className="brand-mark">C</span>
-            <span>
-              <strong>CEYLUXE</strong>
-              <small>TOURS · SRI LANKA</small>
-            </span>
-          </a>
-          <p>Private journeys, thoughtfully made in Sri Lanka.</p>
-        </div>
-        <div className="footer-links">
-          <div>
+      <footer id="contact">
+        <div className="footer-main" data-reveal="up">
+          <div className="footer-brand">
+            <a className="brand" href="#top" aria-label="Ceyluxe Tours home">
+              <span className="brand-mark">C</span>
+              <span><strong>CEYLUXE</strong><small>TOURS · SRI LANKA</small></span>
+            </a>
+            <p>Private journeys, thoughtfully made in Sri Lanka.</p>
+          </div>
+          <div className="footer-links">
             <strong>Explore</strong>
-            <a href="#journeys">Journeys</a>
-            <a href="#why-us">Why Ceyluxe</a>
-            <a href="#process">How it works</a>
+            <a href="#about">Our world</a><a href="#journeys">Journeys</a><a href="#gallery">Gallery</a>
           </div>
-          <div>
-            <strong>Plan</strong>
-            <a href="#plan">Custom journey</a>
-            <a href="mailto:hello@ceyluxetours.com">Email us</a>
+          <div className="footer-links">
+            <strong>Contact</strong>
+            <a href="mailto:hello@ceyluxetours.com">Email us</a><a href={whatsappHref}>WhatsApp</a><a href="#plan">Plan a journey</a>
           </div>
         </div>
-        <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} Ceyluxe Tours</span>
-          <span>Made with care in Sri Lanka</span>
-        </div>
+        <div className="footer-bottom"><span>© {new Date().getFullYear()} Ceyluxe Tours</span><span>Made with care in Sri Lanka</span></div>
       </footer>
     </main>
   );
