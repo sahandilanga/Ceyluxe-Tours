@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { tours } from "@/lib/tours";
+import { getPublishedTours } from "@/lib/tours";
 import { BookingForm } from "./booking-form";
 import { ScrollReveal, SiteHeader, TourPackages } from "./site-experience";
 
@@ -10,10 +10,15 @@ export const metadata: Metadata = {
     "Private, tailor-made Sri Lanka journeys crafted by local travel specialists. Explore culture, wildlife, hill country and the coast.",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const whatsappHref =
   "https://wa.me/?text=Hello%20Ceyluxe%20Tours%2C%20I%27d%20like%20to%20plan%20a%20Sri%20Lanka%20journey.";
 
-export default function Home() {
+export default async function Home() {
+  const tours = await getPublishedTours();
+
   return (
     <main>
       <SiteHeader />

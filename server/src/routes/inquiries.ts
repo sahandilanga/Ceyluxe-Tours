@@ -88,10 +88,11 @@ router.post("/", async (request, response, next) => {
     }
 
     const reference = `CYL-${randomUUID().slice(0, 8).toUpperCase()}`;
+    const { website: _website, ...inquiry } = parsed.data;
+    void _website;
     await Inquiry.create({
-      ...parsed.data,
-      website: undefined,
-      email: parsed.data.email.toLowerCase(),
+      ...inquiry,
+      email: inquiry.email.toLowerCase(),
       reference,
     });
 

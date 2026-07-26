@@ -10,12 +10,15 @@ type PackagePageProps = {
   params: Promise<{ slug: string }>;
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export function generateStaticParams() {
   return tours.map((tour) => ({ slug: tour.slug }));
 }
 
 export async function generateMetadata({ params }: PackagePageProps): Promise<Metadata> {
-  const tour = getTour((await params).slug);
+  const tour = await getTour((await params).slug);
   if (!tour) return {};
 
   return {
@@ -30,7 +33,7 @@ export async function generateMetadata({ params }: PackagePageProps): Promise<Me
 }
 
 export default async function PackageDetailPage({ params }: PackagePageProps) {
-  const tour = getTour((await params).slug);
+  const tour = await getTour((await params).slug);
   if (!tour) notFound();
 
   return (

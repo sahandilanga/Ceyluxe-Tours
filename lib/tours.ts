@@ -120,6 +120,62 @@ export const tours: Tour[] = [
   },
 ];
 
-export function getTour(slug: string) {
-  return tours.find((tour) => tour.slug === slug);
+function isTour(value: unknown): value is Tour {
+  if (!value || typeof value !== "object") return false;
+  const candidate = value as Partial<Tour>;
+  return (
+    typeof candidate.slug === "string" &&
+    typeof candidate.title === "string" &&
+    typeof candidate.image === "string" &&
+    Array.isArray(candidate.highlights) &&
+    Array.isArray(candidate.days)
+  );
+}
+
+type DatabaseTourResult = {
+  tours: Tour[];
+  managedSlugs: string[];
+};
+
+async function loadDatabaseTours(): Promise<DatabaseTourResult> {
+  const backendUrl = process.env.BACKEND_API_URL?.replace(/\/+$/, "");
+  if (!backendUrl) return { tours: [], managedSlugs: [] };
+
+  try {
+    const response = await fetch(`${backendUrl}/api/tours`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(5_000),
+    });
+    if (!response.ok) return { tours: [], managedSlugs: [] };
+    const result = (await response.json()) as {
+      tours?: unknown[];
+      managedSlugs?: unknown[];
+    };
+    return {
+      tours: Array.isArray(result.tours) ? result.tours.filter(isTour) : [],
+      managedSlugs: Array.isArray(result.managedSlugs)
+        ? result.managedSlugs.filter(
+            (slug): slug is string => typeof slug === "string",
+          )
+        : [],
+    };
+  } catch {
+    return { tours: [], managedSlugs: [] };
+  }
+}
+
+export async function getPublishedTours() {
+  const { tours: databaseTours, managedSlugs } = await loadDatabaseTours();
+  if (!databaseTours.length && !managedSlugs.length) return tours;
+
+  const databaseSlugs = new Set(managedSlugs);
+  return [
+    ...databaseTours,
+    ...tours.filter((tour) => !databaseSlugs.has(tour.slug)),
+  ];
+}
+
+export async function getTour(slug: string) {
+  const publishedTours = await getPublishedTours();
+  return publishedTours.find((tour) => tour.slug === slug);
 }

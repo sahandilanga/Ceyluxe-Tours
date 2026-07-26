@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { tours } from "@/lib/tours";
+import { getPublishedTours } from "@/lib/tours";
 import { ScrollReveal, SiteHeader } from "../site-experience";
 
 export const metadata: Metadata = {
@@ -10,7 +10,12 @@ export const metadata: Metadata = {
     "Explore private Sri Lanka itineraries across the Cultural Triangle, hill country, wildlife parks and south coast.",
 };
 
-export default function PackagesPage() {
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export default async function PackagesPage() {
+  const tours = await getPublishedTours();
+
   return (
     <main>
       <SiteHeader />

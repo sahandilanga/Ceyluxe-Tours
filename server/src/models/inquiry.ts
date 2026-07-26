@@ -1,5 +1,26 @@
 import mongoose, { Schema } from "mongoose";
 
+type InquiryRecord = {
+  reference: string;
+  inquiryType: "custom_inquiry" | "package_booking";
+  packageName: string;
+  packageSlug: string;
+  name: string;
+  email: string;
+  whatsapp: string;
+  travelDate: string;
+  arrivalDate: string;
+  departureDate: string;
+  travellers: string;
+  rooms: string;
+  mealPlan: "" | "bed-and-breakfast" | "half-board" | "full-board";
+  journey: string;
+  budget: string;
+  message: string;
+  status: "new" | "contacted" | "quoted" | "confirmed" | "closed";
+  adminNotes: string;
+};
+
 const inquirySchema = new Schema(
   {
     reference: {
@@ -45,9 +66,16 @@ const inquirySchema = new Schema(
       default: "new",
       index: true,
     },
+    adminNotes: {
+      type: String,
+      trim: true,
+      maxlength: 2000,
+      default: "",
+    },
   },
   { timestamps: true, versionKey: false },
 );
 
-export const Inquiry =
-  mongoose.models.Inquiry ?? mongoose.model("Inquiry", inquirySchema);
+export const Inquiry: mongoose.Model<InquiryRecord> =
+  (mongoose.models.Inquiry as mongoose.Model<InquiryRecord> | undefined) ??
+  mongoose.model<InquiryRecord>("Inquiry", inquirySchema);
