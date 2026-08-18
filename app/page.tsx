@@ -4,6 +4,7 @@ import { getPublishedTours } from "@/lib/tours";
 import { BookingForm } from "./booking-form";
 import {
   HeroBackdrop,
+  GalleryShowcase,
   ScrollReveal,
   SiteHeader,
   TourPackages,
@@ -97,38 +98,18 @@ export default async function Home() {
         <TourPackages tours={tours} />
       </div>
 
-      <section className="story" id="why-us">
-        <div className="story-image" data-reveal="image">
-          <Image src="/images/south-coast.jpg" alt="Palm-fringed beach on Sri Lanka's south coast" fill sizes="(max-width: 1050px) 100vw, 50vw" />
-          <span>South Coast · Sri Lanka</span>
-        </div>
-        <div className="story-copy" data-reveal="right">
-          <p className="eyebrow">Why travel with us</p>
-          <h2>Luxury is having the right things taken care of.</h2>
-          <p>
-            Your route, chauffeur-guide, handpicked stays and daily rhythm are
-            chosen around how you want to experience Sri Lanka—not around a coach timetable.
-          </p>
-          <ul>
-            <li><span>01</span>100% private and tailor-made</li>
-            <li><span>02</span>Local specialists, island-wide support</li>
-            <li><span>03</span>Carefully chosen boutique stays</li>
-          </ul>
-          <a className="button button-gold" href="#plan">Start a conversation <span>→</span></a>
-        </div>
-      </section>
+      <div className="journey-gallery-break" aria-hidden="true">
+        <span />
+        <i>◆</i>
+        <span />
+      </div>
 
       <section className="gallery section-shell" id="gallery">
         <div className="section-title" data-reveal="up">
           <p>Moments from the island</p>
           <h2>Your Sri Lanka story awaits</h2>
         </div>
-        <div className="gallery-grid">
-          <div data-reveal="image"><Image src="/images/south-coast.jpg" alt="Sri Lanka's tropical south coast" fill sizes="(max-width: 700px) 100vw, 50vw" /></div>
-          <div data-reveal="image" data-reveal-delay="100"><Image src="/images/ella-train.jpg" alt="Train journey through Ella" fill sizes="(max-width: 700px) 50vw, 25vw" /></div>
-          <div data-reveal="image" data-reveal-delay="180"><Image src="/images/elephants.jpg" alt="Wild elephants in Sri Lanka" fill sizes="(max-width: 700px) 50vw, 25vw" /></div>
-          <div data-reveal="image" data-reveal-delay="100"><Image src="/images/sigiriya.jpg" alt="Sigiriya at sunrise" fill sizes="(max-width: 700px) 100vw, 50vw" /></div>
-        </div>
+        <GalleryShowcase />
       </section>
 
       <section className="planner" id="plan">
@@ -152,8 +133,14 @@ export default async function Home() {
         <div className="footer-main" data-reveal="up">
           <div className="footer-brand">
             <a className="brand" href="#top" aria-label="Ceyluxe Tours home">
-              <span className="brand-mark">C</span>
-              <span><strong>CEYLUXE</strong><small>TOURS · SRI LANKA</small></span>
+              <span className="brand-logo">
+                <Image
+                  src="/images/ceyluxe-logo-transparent.png"
+                  alt=""
+                  width={1952}
+                  height={806}
+                />
+              </span>
             </a>
             <p>Private journeys, thoughtfully made in Sri Lanka.</p>
           </div>

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import type { PointerEvent as ReactPointerEvent } from "react";
 import type { Tour } from "@/lib/tours";
 import { BookingForm } from "./booking-form";
 
@@ -167,8 +168,15 @@ export function SiteHeader() {
   return (
     <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
       <Link className="brand" href="/#top" aria-label="Ceyluxe Tours home">
-        <span className="brand-mark">C</span>
-        <span><strong>CEYLUXE</strong><small>TOURS · SRI LANKA</small></span>
+        <span className="brand-logo">
+          <Image
+            src="/images/ceyluxe-logo-transparent.png"
+            alt=""
+            width={1952}
+            height={806}
+            priority
+          />
+        </span>
       </Link>
       <nav className="desktop-nav" aria-label="Main navigation">
         <Link href="/#top">Home</Link><Link href="/#about">About</Link><Link href="/#journeys">Packages</Link><Link href="/#gallery">Gallery</Link><Link href="/#contact">Contact</Link>
@@ -181,6 +189,149 @@ export function SiteHeader() {
         <Link onClick={() => setOpen(false)} href="/#top">Home</Link><Link onClick={() => setOpen(false)} href="/#about">About</Link><Link onClick={() => setOpen(false)} href="/#journeys">Packages</Link><Link onClick={() => setOpen(false)} href="/#gallery">Gallery</Link><Link onClick={() => setOpen(false)} href="/#contact">Contact</Link><Link onClick={() => setOpen(false)} href="/#plan">Make an inquiry</Link>
       </div>
     </header>
+  );
+}
+
+const galleryMoments = [
+  {
+    src: "/images/south-coast.jpg",
+    alt: "Sri Lanka's tropical south coast",
+    title: "The Southern Shore",
+    location: "Indian Ocean · Sri Lanka",
+  },
+  {
+    src: "/images/ella-train.jpg",
+    alt: "Train crossing the Nine Arch Bridge near Ella",
+    title: "Into the Hills",
+    location: "Ella · Hill Country",
+  },
+  {
+    src: "/images/elephants.jpg",
+    alt: "Wild elephants gathering in Sri Lanka",
+    title: "The Wild",
+    location: "North Central · Sri Lanka",
+  },
+  {
+    src: "/images/sigiriya.jpg",
+    alt: "Sigiriya rock fortress rising above the forest",
+    title: "Ancient Heights",
+    location: "Sigiriya · Cultural Triangle",
+  },
+  {
+    src: "/images/galle-fort.jpg",
+    alt: "Galle Fort lighthouse and ramparts beside the Indian Ocean",
+    title: "Fort by the Sea",
+    location: "Galle · Southern Province",
+  },
+  {
+    src: "/images/mirissa-coast.jpg",
+    alt: "Palm-fringed crescent beach on the coast of Mirissa",
+    title: "Ocean Escape",
+    location: "Mirissa · South Coast",
+  },
+  {
+    src: "/images/nuwara-eliya-tea.jpg",
+    alt: "Misty green tea plantations in Sri Lanka's hill country",
+    title: "Fields in the Mist",
+    location: "Nuwara Eliya · Tea Country",
+  },
+  {
+    src: "/images/kandy-temple.jpg",
+    alt: "Temple of the Sacred Tooth Relic reflected in Kandy Lake",
+    title: "Sacred Kandy",
+    location: "Kandy · Central Province",
+  },
+] as const;
+
+export function GalleryShowcase() {
+  return (
+    <div className="gallery-showcase">
+      <div className="gallery-scene" data-reveal="up">
+        {galleryMoments.slice(0, 4).map((moment, index) => (
+          <figure
+            className={`gallery-card gallery-card-${index + 1}`}
+            key={moment.src}
+            onPointerMove={tiltGalleryCard}
+            onPointerLeave={resetGalleryCard}
+          >
+            <GalleryCardContent moment={moment} sizes={index === 0 ? "(max-width: 700px) 100vw, 50vw" : "(max-width: 700px) 100vw, 28vw"} />
+          </figure>
+        ))}
+      </div>
+
+      <Link className="gallery-more-button" href="/gallery">
+        <span>See more places</span>
+        <i aria-hidden="true">↗</i>
+      </Link>
+    </div>
+  );
+}
+
+function tiltGalleryCard(event: ReactPointerEvent<HTMLElement>) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const card = event.currentTarget;
+  const bounds = card.getBoundingClientRect();
+  const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+  const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+
+  card.style.setProperty("--gallery-rx", `${(-y * 9).toFixed(2)}deg`);
+  card.style.setProperty("--gallery-ry", `${(x * 11).toFixed(2)}deg`);
+  card.style.setProperty("--gallery-x", `${(x * 10).toFixed(2)}px`);
+  card.style.setProperty("--gallery-y", `${(y * 10).toFixed(2)}px`);
+  card.style.setProperty("--gallery-caption-x", `${(-x * 7).toFixed(2)}px`);
+  card.style.setProperty("--gallery-caption-y", `${(-y * 7).toFixed(2)}px`);
+  card.classList.add("is-tilting");
+}
+
+function resetGalleryCard(event: ReactPointerEvent<HTMLElement>) {
+  const card = event.currentTarget;
+  card.style.setProperty("--gallery-rx", "0deg");
+  card.style.setProperty("--gallery-ry", "0deg");
+  card.style.setProperty("--gallery-x", "0px");
+  card.style.setProperty("--gallery-y", "0px");
+  card.style.setProperty("--gallery-caption-x", "0px");
+  card.style.setProperty("--gallery-caption-y", "0px");
+  card.classList.remove("is-tilting");
+}
+
+function GalleryCardContent({ moment, sizes }: { moment: (typeof galleryMoments)[number]; sizes: string }) {
+  return (
+    <div className="gallery-card-surface">
+      <Image src={moment.src} alt={moment.alt} fill sizes={sizes} />
+      <div className="gallery-card-shade" />
+      <figcaption>
+        <span>{moment.location}</span>
+        <strong>{moment.title}</strong>
+      </figcaption>
+      <i className="gallery-glint" aria-hidden="true" />
+    </div>
+  );
+}
+
+export function GalleryPhotoWall() {
+  const rows = [
+    galleryMoments,
+    [...galleryMoments].reverse(),
+    [...galleryMoments.slice(3), ...galleryMoments.slice(0, 3)],
+    [...galleryMoments.slice(5), ...galleryMoments.slice(0, 5)].reverse(),
+    [...galleryMoments.slice(2), ...galleryMoments.slice(0, 2)],
+  ];
+
+  return (
+    <div className="gallery-photo-wall" role="img" aria-label="Moving gallery of Sri Lanka travel destinations">
+      {rows.map((row, rowIndex) => (
+        <div className="photo-wall-row" key={`row-${rowIndex}`}>
+          <div className="photo-wall-track">
+            {[...row, ...row].map((moment, index) => (
+              <div className="photo-wall-tile" key={`${rowIndex}-${moment.src}-${index}`}>
+                <Image src={moment.src} alt="" fill sizes="(max-width: 700px) 55vw, 24vw" priority={rowIndex < 2 && index < 5} />
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
 
